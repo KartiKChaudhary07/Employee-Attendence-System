@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Attendance System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .admin-login-container {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .admin-login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, #2e7d32 0%, #81c784 100%);
+        }
+        
+        .admin-login-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .admin-login-container h2 {
+            text-align: center;
+            color: #2e7d32;
+            margin: 0 0 30px 0;
+            font-size: 28px;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .admin-login-container h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #2e7d32 0%, #81c784 100%);
+            border-radius: 3px;
+        }
+        
+        .admin-login-form .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .admin-login-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #444;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-login-form input {
+            width: 100%;
+            padding: 14px 16px 14px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .admin-login-form input:focus {
+            border-color: #2e7d32;
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+            outline: none;
+            background-color: #fff;
+        }
+        
+        .admin-login-form .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 40px;
+            color: #888;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-login-form input:focus + .input-icon {
+            color: #2e7d32;
+        }
+        
+        .admin-login-form button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, #2e7d32 0%, #43a047 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .admin-login-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
+            background: linear-gradient(90deg, #2e7d32 0%, #4caf50 100%);
+        }
+        
+        .admin-login-form button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(46, 125, 50, 0.3);
+        }
+        
+        .admin-login-form button i {
+            margin-right: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-login-form button:hover i {
+            transform: translateX(3px);
+        }
+        
+        .back-to-home {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 25px;
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 8px 0;
+            width: 100%;
+            border-radius: 6px;
+        }
+        
+        .back-to-home:hover {
+            color: #1b5e20;
+            background-color: rgba(46, 125, 50, 0.1);
+            text-decoration: none;
+            transform: translateX(5px);
+        }
+        
+        .back-to-home i {
+            margin-right: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-home:hover i {
+            transform: translateX(-3px);
+        }
+        
+        .error-message {
+            color: #d32f2f;
+            background-color: #ffebee;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+            font-size: 14px;
+            animation: shake 0.5s ease-in-out;
+            border-left: 4px solid #d32f2f;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .admin-login-container {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+            
+            .admin-login-container h2 {
+                font-size: 24px;
+            }
+            
+            .admin-login-form input {
+                padding: 12px 14px 12px 40px;
+            }
+            
+            .admin-login-form .input-icon {
+                top: 38px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="admin-login-container">
+            <h2><i class="fas fa-user-shield"></i> Admin Login</h2>
+            <form id="adminLoginForm" class="admin-login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <div id="errorMessage" class="error-message">
+                    Invalid username or password. Please try again.
+                </div>
+                <button type="submit">
+                    <i class="fas fa-sign-in-alt"></i> Sign In to Dashboard
+                </button>
+            </form>
+            <a href="index.html" class="back-to-home">
+                <i class="fas fa-arrow-left"></i> Back to Home Page
+            </a>
+        </div>
+    </div>
+
+    <script src="admin-auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('adminLoginForm');
+            const errorMessage = document.getElementById('errorMessage');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+
+            // Handle form submission
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const username = usernameInput.value.trim();
+                    const password = passwordInput.value;
+
+                    if (authenticateAdmin(username, password)) {
+                        // Redirect to admin dashboard on successful login
+                        window.location.href = 'admin-dashboard.html';
+                    } else {
+                        errorMessage.textContent = 'Invalid username or password';
+                        errorMessage.style.display = 'block';
+                        // Clear password field on error
+                        passwordInput.value = '';
+                        passwordInput.focus();
+                        
+                        // Hide error message after 3 seconds
+                        setTimeout(() => {
+                            errorMessage.style.display = 'none';
+                        }, 3000);
+                    }
+                });
+            }
+
+            // Auto-focus username field on page load
+            if (usernameInput) {
+                usernameInput.focus();
+            }
+        });
+    </script>
+</body>
+</html>

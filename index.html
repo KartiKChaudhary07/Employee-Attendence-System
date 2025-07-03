@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Attendance Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <i class="fas fa-user-graduate"></i>
+                <span>Attendance Portal</span>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html" class="active"><i class="fas fa-home"></i> Home</a>
+                <!-- These will be shown only when user is logged in -->
+                <div id="protectedLinks">
+                    <a href="#reports"><i class="fas fa-chart-bar"></i> Reports</a>
+                    <a href="#employees"><i class="fas fa-users"></i> Employees</a>
+                </div>
+                <div id="authLinks">
+                    <a href="login.html" id="loginLink"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    <a href="signup.html" id="signupLink"><i class="fas fa-user-plus"></i> Sign Up</a>
+                    <a href="admin-login.html" class="admin-login-btn"><i class="fas fa-user-shield"></i> Admin</a>
+                </div>
+                <div id="userMenu" class="dropdown">
+                    <button class="dropbtn">
+                        <i class="fas fa-user-circle"></i> <span id="userName">User</span>
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#profile"><i class="fas fa-user"></i> Profile</a>
+                        <a href="#settings"><i class="fas fa-cog"></i> Settings</a>
+                        <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <header class="dashboard-header">
+            <h1><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
+            <div class="header-actions">
+                <div class="date-display">
+                    <i class="far fa-calendar-alt"></i>
+                    <span id="currentDate"></span>
+                </div>
+                <button class="btn btn-primary" id="markAttendanceBtn">
+                    <i class="fas fa-plus"></i> Mark Attendance
+                </button>
+            </div>
+        </header>
+        
+        <main>
+            <div class="attendance-form">
+                <h2>Mark Attendance</h2>
+                <form id="attendanceForm">
+                    <div class="form-group">
+                        <label for="employeeId">Employee ID:</label>
+                        <input type="text" id="employeeId" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date:</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Status:</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="status" value="present" checked> Present</label>
+                            <label><input type="radio" name="status" value="absent"> Absent</label>
+                            <label><input type="radio" name="status" value="late"> Late</label>
+                        </div>
+                    </div>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+
+            <div class="attendance-list">
+                <div class="table-header">
+                    <h2>Attendance Records</h2>
+                    <button id="exportExcel" class="btn btn-primary">
+                        <i class="fas fa-file-excel"></i> Export to Excel
+                    </button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recordsTable">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </main>
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+            <div class="stat-card">
+                <div class="stat-icon stat-present">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Present</h3>
+                    <p id="presentCount">0</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon stat-absent">
+                    <i class="fas fa-user-times"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Absent</h3>
+                    <p id="absentCount">0</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon stat-late">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Late</h3>
+                    <p id="lateCount">0</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon stat-total">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Total</h3>
+                    <p id="totalCount">0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="attendanceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Mark Attendance</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="script.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>

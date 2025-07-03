@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Attendance System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        /* Header Styles */
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .dashboard-header {
+            background: #2e7d32;
+            color: white;
+            padding: 0 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .dashboard-title {
+            font-size: 24px;
+            margin: 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            padding: 18px 0;
+        }
+        
+        .dashboard-title i {
+            margin-right: 12px;
+            font-size: 1.2em;
+        }
+        
+        .dashboard-nav {
+            display: flex;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        .dashboard-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin: 0 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .dashboard-nav a:hover,
+        .dashboard-nav a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .dashboard-nav i {
+            margin-right: 8px;
+        }
+        
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 10px;
+        }
+        
+        /* User Menu */
+        .user-menu {
+            position: relative;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            color: #2e7d32;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+        }
+        
+        .user-menu:hover .dropdown-menu {
+            display: block;
+        }
+        
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 15px;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        
+        .dropdown-menu a:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .dropdown-menu i {
+            width: 20px;
+            margin-right: 10px;
+            text-align: center;
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background: #eee;
+            margin: 5px 0;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 992px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .dashboard-nav {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                align-items: stretch;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 0 0 8px 8px;
+            }
+            
+            .dashboard-nav.active {
+                max-height: 500px;
+                padding: 10px 0;
+            }
+            
+            .dashboard-nav a {
+                color: #333;
+                margin: 0;
+                border-radius: 0;
+                padding: 12px 25px;
+            }
+            
+            .dashboard-nav a:hover,
+            .dashboard-nav a.active {
+                background: #f5f5f5;
+                color: #2e7d32;
+            }
+            
+            .user-menu {
+                margin-left: auto;
+                margin-right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <div class="header-container">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="dashboard-title">
+                    <i class="fas fa-tachometer-alt"></i> 
+                    <span class="title-text">Attendance System</span>
+                </h1>
+            </div>
+            
+            <div class="header-right">
+                <nav class="dashboard-nav" id="mainNav">
+                    <div class="nav-links">
+                        <a href="#" class="nav-link active" data-tab="dashboard">
+                            <i class="fas fa-tachometer-alt"></i> 
+                            <span class="link-text">Dashboard</span>
+                        </a>
+                        <a href="#" class="nav-link" data-tab="employees">
+                            <i class="fas fa-users"></i> 
+                            <span class="link-text">Employees</span>
+                        </a>
+                        <a href="#" class="nav-link" data-tab="attendance">
+                            <i class="fas fa-clipboard-check"></i> 
+                            <span class="link-text">Attendance</span>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div class="user-menu">
+                <div class="user-avatar">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div class="dropdown-menu">
+                    <div class="user-info">
+                        <div class="user-name">Admin</div>
+                        <div class="user-email">2215000878</div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-user-cog"></i> Admin Settings
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-cog"></i> Preferences
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" id="logoutBtn" class="dropdown-item text-danger">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="dashboard-container">
+        
+        <!-- Dashboard Tab -->
+        <div id="dashboardTab" class="tab-content">
+            <div class="stat-cards">
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <h3 id="totalEmployees">0</h3>
+                    <p>Total Employees</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-user-check"></i>
+                    <h3 id="presentToday">0</h3>
+                    <p>Present Today</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-user-clock"></i>
+                    <h3 id="lateToday">0</h3>
+                    <p>Late Today</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-user-times"></i>
+                    <h3 id="absentToday">0</h3>
+                    <p>Absent Today</p>
+                </div>
+            </div>
+            
+            <div class="dashboard-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Attendance</h2>
+                        <a href="#" class="btn btn-secondary" id="viewAllAttendance">
+                            View All <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="recentAttendanceTable">
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Check In</th>
+                                    <th>Check Out</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Filled by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Department Summary</h2>
+                    </div>
+                    <div id="departmentChart" class="chart-container">
+                        <!-- Chart will be rendered here -->
+                        <canvas id="departmentCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Employees Tab -->
+        <div id="employeesTab" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Employee List</h2>
+                    <div>
+                        <button class="btn btn-secondary" id="addEmployeeBtn">
+                            <i class="fas fa-plus"></i> Add Employee
+                        </button>
+                        <button class="btn btn-primary" id="exportEmployeesBtn">
+                            <i class="fas fa-file-export"></i> Export
+                        </button>
+                    </div>
+                </div>
+                <div class="filters">
+                    <div class="filter-group">
+                        <label for="deptFilter">Department</label>
+                        <select id="deptFilter">
+                            <option value="">All Departments</option>
+                            <!-- Filled by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="searchEmployee">Search</label>
+                        <input type="text" id="searchEmployee" placeholder="Search by name or ID">
+                    </div>
+                    <button class="btn btn-primary" id="applyEmployeeFilters" aria-label="Apply filters">
+                        <i class="fas fa-filter"></i> Apply Filters
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table id="employeesTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Department</th>
+                                <th>Position</th>
+                                <th>Joining Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Filled by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button id="prevPage" disabled aria-label="Previous page"><i class="fas fa-chevron-left"></i></button>
+                    <span id="pageInfo">Page 1 of 1</span>
+                    <button id="nextPage" disabled aria-label="Next page"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Attendance Tab -->
+        <div id="attendanceTab" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Attendance Records</h2>
+                    <div>
+                        <button class="btn btn-primary" id="exportAttendanceBtn" aria-label="Export attendance data">
+                            <i class="fas fa-file-export"></i> Export
+                        </button>
+                    </div>
+                </div>
+                <div class="filters">
+                    <div class="filter-group">
+                        <label for="attDeptFilter">Department</label>
+                        <select id="attDeptFilter">
+                            <option value="">All Departments</option>
+                            <!-- Filled by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="attStatusFilter">Status</label>
+                        <select id="attStatusFilter">
+                            <option value="">All Status</option>
+                            <option value="present">Present</option>
+                            <option value="absent">Absent</option>
+                            <option value="late">Late</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="startDate">From Date</label>
+                        <input type="date" id="startDate" class="date-picker">
+                    </div>
+                    <div class="filter-group">
+                        <label for="endDate">To Date</label>
+                        <input type="date" id="endDate" class="date-picker">
+                    </div>
+                    <button class="btn btn-primary" id="applyAttendanceFilters" aria-label="Apply attendance filters">
+                        <i class="fas fa-filter"></i> Apply Filters
+                    </button>
+                    <button class="btn btn-secondary" id="resetAttendanceFilters" aria-label="Reset filters">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                    <button id="headerLogoutBtn" class="btn btn-outline-light">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table id="attendanceTable">
+                        <thead>
+                            <tr>
+                                <th>Employee ID</th>
+                                <th>Name</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Check In</th>
+                                <th>Check Out</th>
+                                <th>Department</th>
+                                <th>Position</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Filled by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button id="attPrevPage" disabled aria-label="Previous page"><i class="fas fa-chevron-left"></i></button>
+                    <span id="attPageInfo">Page 1 of 1</span>
+                    <button id="attNextPage" disabled aria-label="Next page"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Employee Modal -->
+    <div id="employeeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add Employee</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="employeeForm">
+                    <input type="hidden" id="employeeId">
+                    <div class="form-group">
+                        <label for="empName">Full Name *</label>
+                        <input type="text" id="empName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="empEmail">Email *</label>
+                        <input type="email" id="empEmail" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="empDept">Department *</label>
+                            <select id="empDept" required>
+                                <option value="">Select Department</option>
+                                <option value="Engineering">Engineering</option>
+                                <option value="HR">HR</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="Sales">Sales</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Operations">Operations</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="empPosition">Position *</label>
+                            <input type="text" id="empPosition" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="empId">Employee ID *</label>
+                            <input type="text" id="empId" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="empJoinDate">Joining Date *</label>
+                            <input type="date" id="empJoinDate" required>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="modalCancelBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="admin-auth.js"></script>
+<script>
+    // Mobile menu toggle and admin authentication
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mobile menu functionality
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.getElementById('mainNav');
+        
+        if (mobileMenuBtn && mainNav) {
+            mobileMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                mainNav.classList.toggle('nav-mobile-visible');
+                this.setAttribute('aria-expanded', 
+                    this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true'
+                );
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (mainNav.classList.contains('nav-mobile-visible') && 
+                    !e.target.closest('#mainNav') && 
+                    e.target !== mobileMenuBtn) {
+                    mainNav.classList.remove('nav-mobile-visible');
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+            
+            // Close menu when a nav link is clicked
+            const navLinks = mainNav.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 992) {
+                        mainNav.classList.remove('nav-mobile-visible');
+                        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            });
+        }
+        
+        // Check admin authentication
+        // Protect admin routes
+        if (!isAdminAuthenticated()) {
+            window.location.href = 'admin-login.html';
+            return;
+        }
+
+        // Handle logout
+        const logoutButtons = document.querySelectorAll('.logout-btn, #logoutBtn');
+        logoutButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                logoutAdmin();
+                window.location.href = 'index.html';
+            });
+        });
+
+        // Rest of your existing dashboard code...
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (currentUser) {
+            // Update UI with current user info if needed
+            const userNameElements = document.querySelectorAll('.user-name');
+            userNameElements.forEach(el => {
+                el.textContent = currentUser.name || 'Admin';
+            });
+        }
+    });
+</script>
+<script src="admin-dashboard.js"></script>
+</body>
+</html>
