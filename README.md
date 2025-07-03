@@ -120,3 +120,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - GitHub: [KartiKChaudhary07](https://github.com/KartiKChaudhary07)
 - Email: kartikchaudhary07@gmail.com
+=======
+# Employee-Attendence-System
+>>>>>>> e3f63cdc7f2db0e694da8e30c79b4ae3181a8845
